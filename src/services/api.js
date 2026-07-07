@@ -1,5 +1,5 @@
 // Central API service — all fetch calls go through here
-const BASE_URL = 'http://localhost:3001';
+const BASE_URL = 'https://saarthi-3ap6.onrender.com';
 
 const apiFetch = async (path, options = {}) => {
   const response = await fetch(`${BASE_URL}${path}`, {
