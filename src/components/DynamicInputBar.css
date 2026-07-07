@@ -1,0 +1,77 @@
+.input-container {
+  width: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--color-bg);
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+  position: relative;
+  z-index: 10;
+}
+
+.input-container.focused {
+  box-shadow: var(--shadow-premium);
+  border-color: transparent;
+  transform: translateY(-2px);
+  animation: breathe 4s infinite ease-in-out;
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-md);
+  height: 64px;
+}
+
+.dynamic-input {
+  flex: 1;
+  height: 100%;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  color: var(--color-text-main);
+  padding: 0 var(--space-md);
+}
+
+.dynamic-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: var(--color-text-muted);
+  transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+  background: var(--color-card);
+  color: var(--color-primary);
+}
+
+.pulse-hover:hover {
+  background: rgba(255, 153, 51, 0.1);
+  color: var(--color-accent);
+}
+
+.submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: var(--color-bg);
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(26, 35, 126, 0.2);
+}
+
+.submit-btn:hover {
+  background: var(--color-primary-light);
+  transform: scale(1.05);
+}

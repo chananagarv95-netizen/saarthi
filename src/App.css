@@ -1,0 +1,118 @@
+.app-layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--color-bg);
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow-y: auto;
+  padding: var(--space-xl) var(--space-lg);
+  padding-bottom: var(--space-3xl);
+}
+
+.header {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-3xl);
+  animation: slideUp 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.brand {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--color-text-main);
+  letter-spacing: -0.04em;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.avatar:hover {
+  background: var(--color-card-hover);
+  color: var(--color-primary);
+}
+
+.content-wrapper {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.hero {
+  margin-bottom: var(--space-2xl);
+}
+
+.greeting {
+  font-size: 40px;
+  color: var(--color-text-main);
+  margin-bottom: var(--space-xs);
+}
+
+.wave {
+  display: inline-block;
+  animation: wave 2.5s infinite;
+  transform-origin: 70% 70%;
+}
+
+@keyframes wave {
+  0% { transform: rotate( 0.0deg) }
+  10% { transform: rotate(14.0deg) }
+  20% { transform: rotate(-8.0deg) }
+  30% { transform: rotate(14.0deg) }
+  40% { transform: rotate(-4.0deg) }
+  50% { transform: rotate(10.0deg) }
+  60% { transform: rotate( 0.0deg) }
+  100% { transform: rotate( 0.0deg) }
+}
+
+.subtitle {
+  font-size: 20px;
+  color: var(--color-text-muted);
+}
+
+.quick-actions-container {
+  margin-top: var(--space-3xl);
+}
+
+.section-title {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-md);
+  font-weight: 600;
+}
+
+.quick-actions {
+  display: flex;
+  gap: var(--space-md);
+  overflow-x: auto;
+  padding-bottom: var(--space-md); /* For shadow */
+  scrollbar-width: none;
+}
+.quick-actions::-webkit-scrollbar {
+  display: none;
+}

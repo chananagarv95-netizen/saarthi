@@ -1,0 +1,129 @@
+@import './HistoryPage.css';
+
+.profile-card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-xl);
+}
+
+.profile-hero {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-xl);
+  padding-bottom: var(--space-xl);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.profile-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary), #5C6BC0);
+  color: white;
+  font-size: 24px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.profile-name {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--color-text-main);
+  margin-bottom: var(--space-xs);
+}
+
+.profile-badges {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+}
+
+.badge.verified { background: rgba(19, 136, 8, 0.1); color: var(--color-success); }
+.badge.pending { background: rgba(255, 153, 51, 0.1); color: var(--color-accent); }
+
+.edit-btn {
+  margin-left: auto;
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-main);
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.edit-btn:hover { background: var(--color-primary); color: white; border-color: var(--color-primary); }
+
+.profile-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.field-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.field-input {
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  color: var(--color-text-main);
+  background: white;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.field-input[readonly] { background: transparent; border-color: transparent; padding-left: 0; }
+.field-input.editable:focus { border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1); outline: none; }
+
+.save-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-top: var(--space-lg);
+  padding: var(--space-sm) var(--space-xl);
+  background: var(--color-primary);
+  color: white;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+.save-btn:hover { background: var(--color-primary-light); }
+.save-btn.saved { background: var(--color-success); }
+
+.pref-section { margin-top: var(--space-lg); }
+.section-label { font-size: 12px; font-weight: 600; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-md); }
+.pref-grid { display: flex; gap: var(--space-sm); flex-wrap: wrap; }
+.pref-chip { padding: var(--space-xs) var(--space-md); background: var(--color-card); border: 1px solid var(--color-border); border-radius: var(--radius-pill); font-size: 13px; color: var(--color-text-muted); }
