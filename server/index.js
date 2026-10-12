@@ -9,7 +9,8 @@ const fs = require('fs');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const { processChat, processWorkflow, analyzeDocument } = require('./services/assistant');
-const { matchSchemes, publicService, WORKFLOWS, lastReviewed } = require('./services/catalog');
+const { matchSchemes, serviceDetail, WORKFLOWS, CATEGORIES, lastReviewed } = require('./services/catalog');
+const { TYPES: DRAFT_TYPES, draftTypes, createDraft } = require('./services/drafts');
 const { getProviders } = require('./services/llm');
 
 const app = express();
@@ -69,7 +70,24 @@ app.post('/api/workflow', async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
-app.get('/api/services', (req, res) => res.json({ services: WORKFLOWS.map(publicService) }));
+app.get('/api/services', (req, res) => {
+  res.set('Cache-Control', 'public, max-age=3600');
+  res.json({ categories: CATEGORIES.map(({ id, label }) => ({ id, label })), services: WORKFLOWS.filter((w) => w !== 'GENERAL').map(serviceDetail) });
+});
+
+app.get('/api/drafts/types', (req, res) => {
+  res.set('Cache-Control', 'public, max-age=3600');
+  res.json({ types: draftTypes() });
+});
+
+app.post('/api/drafts', async (req, res, next) => {
+  try {
+    const { type, details, profile } = req.body || {};
+    if (!DRAFT_TYPES[type]) return badRequest(res, 'Unknown letter type');
+    if (!details || typeof details !== 'object' || Array.isArray(details)) return badRequest(res, 'Details are required');
+    res.json(await createDraft({ type, details, profile: asProfile(profile) }));
+  } catch (e) { next(e); }
+});
 
 app.post('/api/schemes', (req, res) => {
   const schemes = matchSchemes(asProfile(req.body?.profile));

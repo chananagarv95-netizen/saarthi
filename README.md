@@ -11,11 +11,15 @@ Get any Indian government service done, step by step, in your own language. Ask 
 | **Voice in, voice out** | Speech input and read-aloud in the user's language (Web Speech API, no extra service). |
 | **Document check** | Upload a photo or PDF: SAARTHI reads the fields, flags problems and expiry, and says what the document is useful for. Aadhaar numbers are always masked and files are never stored. |
 | **Scheme finder** | Matches the profile against 19 central schemes (PM-KISAN, PM-JAY, NSP, APY, Mudra, SVANidhi…). Deterministic rules, instant, works without AI. |
+| **Letters & RTI drafter** | RTI applications, grievances, lost-document police reports, cyber-fraud complaints, consumer notices and general applications. Templates work offline; AI only polishes and translates them. Missing details stay highlighted, never invented. Print/PDF, copy, `.txt`, WhatsApp. |
+| **Services directory** | All 24 services by category, each with steps, documents, fees, verified portal, helpline and a "nearest office" Maps link. |
+| **Document vault** | Save checked documents (details only, never files); expiry dates become tracker reminders. |
 | **Tracker** | Renewals and deadlines with `.ics` calendar reminders. |
+| **Command palette** | ⌘K / Ctrl+K to jump to any service or tool, or ask the assistant directly. |
 | **Any AI provider** | Groq, NVIDIA NIM, OpenRouter, Gemini, OpenAI, Ollama or any OpenAI-compatible endpoint, with automatic failover. |
 | **Offline mode** | With no API key the app still works, using the verified catalog. |
 | **Privacy by design** | Profile, chats and tracker live in `localStorage`. The API is stateless and has no database. |
-| **Product polish** | Three.js hero, dark mode, installable PWA, mobile bottom navigation, accessible controls, reduced-motion support. |
+| **Premium 3D interface** | Three.js landing page: shader-based dot-matrix Earth with India in the tricolour, travelling data arcs between 14 cities, Fresnel atmosphere, bloom post-processing and scroll-choreographed camera. Dark glass design system, cursor spotlights, scroll reveals; auto-degrades on low-end phones and honours reduced motion. Installable PWA. |
 
 ## Quick start
 
@@ -68,8 +72,10 @@ docker build -t saarthi . && docker run -p 3001:3001 -e GROQ_API_KEY=... saarthi
 | POST | `/api/chat` | `{ message, history[], profile }` → answer, workflow, verified service info, follow-ups |
 | POST | `/api/workflow` | `{ workflow, profile }` → personalised step-by-step guide |
 | POST | `/api/schemes` | `{ profile }` → matched schemes |
+| GET | `/api/drafts/types` | Letter types and their form fields |
+| POST | `/api/drafts` | `{ type, details, profile }` → formatted letter, submission steps |
 | POST | `/api/document/analyze` | multipart `file` (PDF/JPG/PNG/WEBP, ≤ 4 MB) → extracted fields, issues, expiry |
-| GET | `/api/services` | Service catalog |
+| GET | `/api/services` | Categories + all services with steps and office links |
 
 ## Project layout
 
@@ -79,8 +85,11 @@ server/index.js           Express app: security, validation, routes, static host
 server/services/llm.js    Provider-agnostic OpenAI-compatible client with failover
 server/services/catalog.js Verified services, helplines, scheme rules, offline classifier
 server/services/assistant.js Chat / workflow / document logic (AI + offline fallback)
+server/services/drafts.js  Letter & RTI templates (+ optional AI polish)
 server/test/              node:test suite (npm test)
-src/                      React 19 + Vite frontend, Three.js hero
+src/components/Scene3D.jsx WebGL globe (shaders, bloom, scroll choreography)
+src/styles.css            Design system (single stylesheet)
+src/                      React 19 + Vite frontend
 ```
 
 ## Quality

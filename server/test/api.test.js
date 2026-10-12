@@ -105,3 +105,27 @@ test('workflow + schemes + health endpoints', async () => {
   const health = await (await fetch(`${base}/api/health`)).json();
   assert.equal(health.ai, 'offline');
 });
+
+test('letter drafter works offline and never drops user facts', async () => {
+  const types = await (await fetch(`${base}/api/drafts/types`)).json();
+  assert.ok(types.types.some((t) => t.id === 'RTI'));
+  const post = (body) => fetch(`${base}/api/drafts`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const rti = await (await post({ type: 'RTI', details: { authority: 'MCD', questions: 'Status of complaint 42\nCopy of file notings', bpl: true }, profile: { name: 'Asha' } })).json();
+  assert.equal(rti.provider, 'template');
+  assert.match(rti.letter, /Section 6\(1\)/);
+  assert.match(rti.letter, /1\. Status of complaint 42\n2\. Copy of file notings/);
+  assert.match(rti.letter, /BPL/);
+  assert.match(rti.letter, /Asha/);
+  assert.match(rti.letter, /\[Office address\]/); // missing fields become visible placeholders
+  assert.equal((await post({ type: 'NOPE', details: {} })).status, 400);
+  assert.equal((await post({ type: 'RTI' })).status, 400);
+});
+
+test('services directory exposes categories, steps and office links', async () => {
+  const data = await (await fetch(`${base}/api/services`)).json();
+  const passport = data.services.find((s) => s.id === 'PASSPORT');
+  assert.ok(passport.steps.length > 0);
+  assert.equal(passport.category, 'identity');
+  assert.match(passport.officeUrl, /^https:\/\/www\.google\.com\/maps\/search\//);
+  assert.ok(data.services.every((s) => data.categories.some((c) => c.id === s.category)));
+});

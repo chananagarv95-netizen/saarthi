@@ -50,6 +50,9 @@ export const api = {
   chat: (message, history) => postJson('/api/chat', { message, history, profile: storage.getProfile() }),
   workflow: (workflow, context) => postJson('/api/workflow', { workflow, context, profile: storage.getProfile() }),
   schemes: (profile) => postJson('/api/schemes', { profile }),
+  services: () => request('/api/services'),
+  draftTypes: () => request('/api/drafts/types'),
+  draft: (type, details) => postJson('/api/drafts', { type, details, profile: storage.getProfile() }),
   analyzeDocument: async (rawFile) => {
     const file = await compressImage(rawFile);
     if (file.size > MAX_UPLOAD_MB * 1024 * 1024) throw new Error(`File is too large. Please upload a file under ${MAX_UPLOAD_MB} MB.`);

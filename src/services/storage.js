@@ -2,7 +2,7 @@
 // (except the profile fields sent along with a question to personalise answers).
 import { useSyncExternalStore } from 'react';
 
-const KEYS = { chats: 'saarthi_chats', profile: 'saarthi_profile', tracker: 'saarthi_tracker' };
+const KEYS = { chats: 'saarthi_chats', profile: 'saarthi_profile', tracker: 'saarthi_tracker', vault: 'saarthi_vault', letters: 'saarthi_letters' };
 
 export const DEFAULT_PROFILE = { name: '', age: '', gender: '', state: '', occupation: '', income: '', category: '', disability: false, language: 'English' };
 
@@ -37,6 +37,14 @@ export const storage = {
   saveTracker: (items) => write(KEYS.tracker, items),
   addTrackerItem: (item) => storage.saveTracker([{ id: crypto.randomUUID(), done: false, createdAt: new Date().toISOString(), ...item }, ...storage.getTracker()]),
 
+  getVault: () => get(KEYS.vault, []),
+  saveToVault: (doc) => write(KEYS.vault, [{ id: crypto.randomUUID(), savedAt: new Date().toISOString(), ...doc }, ...storage.getVault()].slice(0, 100)),
+  removeFromVault: (id) => write(KEYS.vault, storage.getVault().filter((d) => d.id !== id)),
+
+  getLetters: () => get(KEYS.letters, []),
+  saveLetter: (letter) => write(KEYS.letters, [{ id: crypto.randomUUID(), createdAt: new Date().toISOString(), ...letter }, ...storage.getLetters()].slice(0, 30)),
+  removeLetter: (id) => write(KEYS.letters, storage.getLetters().filter((l) => l.id !== id)),
+
   clearAll: () => { Object.values(KEYS).forEach((k) => { try { localStorage.removeItem(k); } catch { /* ignore */ } delete cache[k]; }); listeners.forEach((l) => l()); }
 };
 
@@ -46,6 +54,8 @@ const subscribe = (l) => { listeners.add(l); return () => listeners.delete(l); }
 export const useProfile = () => useSyncExternalStore(subscribe, () => get(KEYS.profile, {}));
 export const useTracker = () => useSyncExternalStore(subscribe, storage.getTracker);
 export const useChats = () => useSyncExternalStore(subscribe, storage.getChats);
+export const useVault = () => useSyncExternalStore(subscribe, storage.getVault);
+export const useLetters = () => useSyncExternalStore(subscribe, storage.getLetters);
 
 export const LANGUAGES = {
   English: 'en-IN', Hindi: 'hi-IN', Bengali: 'bn-IN', Marathi: 'mr-IN', Telugu: 'te-IN', Tamil: 'ta-IN', Gujarati: 'gu-IN',

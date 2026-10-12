@@ -302,6 +302,28 @@ const SERVICES = {
 
 const WORKFLOWS = Object.keys(SERVICES);
 
+const CATEGORIES = [
+  { id: 'identity', label: 'Identity & IDs', ids: ['LOST_AADHAAR', 'PAN', 'PASSPORT', 'VOTER_ID', 'DRIVING_LICENCE'] },
+  { id: 'certificates', label: 'Certificates', ids: ['INCOME_CERT', 'DOMICILE', 'BIRTH_CERT', 'DEATH_CERT', 'MARRIAGE_CERT'] },
+  { id: 'welfare', label: 'Welfare & health', ids: ['SCHOLARSHIP', 'HEALTHCARE', 'RATION_CARD', 'PENSION', 'GAS'] },
+  { id: 'farmers', label: 'Farmers', ids: ['AGRICULTURE', 'CROP_INSURANCE'] },
+  { id: 'work', label: 'Jobs & property', ids: ['EMPLOYMENT', 'PROPERTY'] },
+  { id: 'utilities', label: 'Utilities', ids: ['ELECTRICITY', 'WATER'] },
+  { id: 'justice', label: 'Complaints & safety', ids: ['CYBER_FRAUD', 'COMPLAINT', 'CONSUMER'] }
+];
+const categoryOf = Object.fromEntries(CATEGORIES.flatMap((c) => c.ids.map((id) => [id, c.id])));
+
+// Google Maps search for the nearest office that handles the service.
+const OFFICE = {
+  LOST_AADHAAR: 'Aadhaar Seva Kendra', PASSPORT: 'Passport Seva Kendra', DRIVING_LICENCE: 'RTO office', VOTER_ID: 'Electoral Registration Office',
+  PAN: 'PAN card centre', INCOME_CERT: 'Tehsil office', DOMICILE: 'Tehsil office', BIRTH_CERT: 'Municipal corporation office', DEATH_CERT: 'Municipal corporation office',
+  MARRIAGE_CERT: 'Sub Registrar office', PROPERTY: 'Sub Registrar office', RATION_CARD: 'Food and civil supplies office', HEALTHCARE: 'Ayushman Bharat hospital',
+  AGRICULTURE: 'Common Service Centre', CROP_INSURANCE: 'Common Service Centre', PENSION: 'Block Development Office', EMPLOYMENT: 'Employment exchange',
+  ELECTRICITY: 'Electricity board office', WATER: 'Jal Board office', GAS: 'LPG gas distributor', CYBER_FRAUD: 'Cyber crime police station',
+  CONSUMER: 'District consumer commission', SCHOLARSHIP: 'Common Service Centre', GENERAL: 'Common Service Centre'
+};
+const officeUrl = (id) => (OFFICE[id] ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${OFFICE[id]} near me`)}` : '');
+
 // Rule-of-thumb scheme screening. Each check returns a reason string when the
 // profile looks eligible, else null. These are indicative only — the UI always
 // says "confirm on the official portal".
@@ -442,7 +464,11 @@ const classify = (text) => {
 
 const publicService = (id) => {
   const s = SERVICES[id] || SERVICES.GENERAL;
-  return { id: SERVICES[id] ? id : 'GENERAL', title: s.title, emoji: s.emoji, department: s.department, portal: s.portal, helpline: s.helpline, documents: s.documents, fees: s.fees || '' };
+  const key = SERVICES[id] ? id : 'GENERAL';
+  return { id: key, title: s.title, emoji: s.emoji, department: s.department, category: categoryOf[key] || 'general', portal: s.portal, helpline: s.helpline, documents: s.documents, fees: s.fees || '', office: OFFICE[key] || '', officeUrl: officeUrl(key) };
 };
 
-module.exports = { SERVICES, WORKFLOWS, SCHEMES, classify, matchSchemes, normalizeProfile, publicService, lastReviewed };
+// Full record (with steps) for the services directory.
+const serviceDetail = (id) => ({ ...publicService(id), steps: SERVICES[id].steps });
+
+module.exports = { SERVICES, WORKFLOWS, SCHEMES, CATEGORIES, classify, matchSchemes, normalizeProfile, publicService, serviceDetail, lastReviewed };
