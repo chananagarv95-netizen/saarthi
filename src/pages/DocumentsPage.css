@@ -73,7 +73,7 @@
 
 .status-badge { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: var(--radius-pill); }
 .status-badge.valid { background: rgba(19, 136, 8, 0.1); color: var(--color-success); }
-.status-badge.invalid { background: rgba(220, 38, 38, 0.1); color: #DC2626; }
+.status-badge.invalid { background: rgba(220, 38, 38, 0.1); color: var(--color-danger); }
 
 .confidence-chip {
   margin-left: auto; font-size: 13px; font-weight: 600;
@@ -110,3 +110,36 @@
   cursor: pointer; border: none; transition: all 0.2s ease;
 }
 .retry-btn:hover { background: var(--color-primary-light); }
+
+.status-badge { display: inline-flex; align-items: center; gap: 3px; margin-right: 6px; }
+.status-badge.warn { background: rgba(255, 153, 51, 0.12); color: var(--color-accent); }
+.result-icon.valid { color: var(--color-success); }
+.result-icon.warn { color: var(--color-accent); }
+.result-icon.invalid { color: var(--color-danger); }
+.result-header > div { min-width: 0; }
+
+.doc-summary { font-size: 14px; color: var(--color-text-main); margin-bottom: var(--space-lg); line-height: 1.6; }
+.field-row { gap: var(--space-md); }
+.field-val { text-align: right; word-break: break-word; }
+.missing-fields { align-items: flex-start; }
+.missing-fields ul { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+
+.useful-for { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: var(--space-md); font-size: 13px; color: var(--color-text-muted); }
+.doc-disclaimer { display: flex; align-items: center; gap: 4px; margin-top: var(--space-md); font-size: 11px; color: var(--color-text-muted); }
+
+.result-card.compact { padding: var(--space-md); max-width: 480px; }
+.result-card.compact .result-header { padding-bottom: var(--space-md); margin-bottom: var(--space-md); }
+
+.privacy-note { display: flex; gap: var(--space-sm); align-items: flex-start; font-size: 13px; color: var(--color-text-muted); margin-top: var(--space-lg); padding: var(--space-md); border-radius: var(--radius-md); background: var(--color-primary-soft); }
+
+@media (max-width: 768px) {
+  .upload-zone { padding: var(--space-2xl) var(--space-md); }
+  .result-card { padding: var(--space-md); }
+  .result-header { flex-wrap: wrap; }
+  .confidence-chip { margin-left: 0; }
+}
+
+.camera-btn { margin-top: var(--space-md); }
+.progress-fill.indeterminate { width: 40%; animation: indeterminate 1.4s ease-in-out infinite; }
+@keyframes indeterminate { 0% { transform: translateX(-100%); } 100% { transform: translateX(250%); } }
+.result-card.error h3 { margin-bottom: var(--space-xs); }

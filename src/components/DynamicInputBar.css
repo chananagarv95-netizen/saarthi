@@ -75,3 +75,17 @@
   background: var(--color-primary-light);
   transform: scale(1.05);
 }
+
+.icon-btn:disabled, .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.input-container.listening { border-color: var(--color-accent); box-shadow: 0 0 0 4px rgba(255, 153, 51, 0.15); }
+.mic-live { background: var(--color-accent) !important; color: #fff !important; animation: mic-pulse 1.2s infinite; }
+@keyframes mic-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255, 153, 51, 0.5); } 50% { box-shadow: 0 0 0 10px rgba(255, 153, 51, 0); } }
+
+.voice-error { position: absolute; left: var(--space-lg); bottom: -24px; font-size: 12px; color: var(--color-danger); }
+
+@media (max-width: 768px) {
+  .input-wrapper { height: 56px; padding-left: var(--space-xs); }
+  .dynamic-input { font-size: 16px; padding: 0 var(--space-sm); } /* 16px stops iOS zoom-on-focus */
+}
+.dynamic-input:focus-visible { outline: none; } /* the pill container shows focus */

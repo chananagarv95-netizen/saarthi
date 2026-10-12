@@ -11,11 +11,13 @@
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
   flex-shrink: 0;
+  text-align: left;
+  color: inherit;
 }
 
 .action-card:hover {
   transform: translateY(-4px);
-  background: var(--color-bg);
+  background: var(--color-card-hover);
   border-color: transparent;
   box-shadow: var(--shadow-md);
 }

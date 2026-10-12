@@ -1,53 +1,30 @@
-import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { BrainCircuit, Clock, FileText, User, Settings } from 'lucide-react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { MessageCircle, Clock, FileText, CalendarCheck, Sparkles, User } from 'lucide-react';
 import './Sidebar.css';
 
 const NAV_ITEMS = [
-  { icon: BrainCircuit, label: 'AI Assistant', path: '/' },
-  { icon: Clock, label: 'History', path: '/history' },
+  { icon: MessageCircle, label: 'Assistant', path: '/' },
+  { icon: Sparkles, label: 'Schemes', path: '/schemes' },
   { icon: FileText, label: 'Documents', path: '/documents' },
-  { icon: Settings, label: 'Timeline', path: '/timeline' },
+  { icon: CalendarCheck, label: 'Tracker', path: '/tracker' },
+  { icon: Clock, label: 'History', path: '/history' }
 ];
 
 const Sidebar = () => {
   const navigate = useNavigate();
-  const { pathname } = useLocation();
-
-  const isActive = (path) => {
-    if (path === '/') return pathname === '/' || pathname === '/chat';
-    return pathname.startsWith(path);
-  };
+  const item = ({ icon: Icon, label, path }) => (
+    <NavLink key={path} to={path} end={path === '/'} className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title={label} aria-label={label}>
+      <Icon size={22} strokeWidth={1.6} />
+      <span className="nav-label">{label}</span>
+    </NavLink>
+  );
 
   return (
-    <aside className="sidebar">
-      <div className="sidebar-top">
-        <div className="logo-mark" onClick={() => navigate('/')} title="SAARTHI Home">S</div>
-      </div>
-
-      <nav className="sidebar-nav">
-        {NAV_ITEMS.map(({ icon: Icon, label, path }) => (
-          <button
-            key={path}
-            className={`nav-item ${isActive(path) ? 'active' : ''}`}
-            title={label}
-            onClick={() => navigate(path)}
-          >
-            <Icon size={22} strokeWidth={1.5} />
-          </button>
-        ))}
-      </nav>
-
-      <div className="sidebar-bottom">
-        <button
-          className={`nav-item ${pathname === '/profile' ? 'active' : ''}`}
-          title="Profile"
-          onClick={() => navigate('/profile')}
-        >
-          <User size={22} strokeWidth={1.5} />
-        </button>
-      </div>
-    </aside>
+    <nav className="sidebar" aria-label="Main">
+      <button type="button" className="logo-mark" onClick={() => navigate('/')} aria-label="SAARTHI home">S</button>
+      <div className="sidebar-nav">{NAV_ITEMS.map(item)}</div>
+      <div className="sidebar-bottom">{item({ icon: User, label: 'Profile', path: '/profile' })}</div>
+    </nav>
   );
 };
 

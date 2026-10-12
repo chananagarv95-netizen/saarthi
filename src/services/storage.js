@@ -1,28 +1,54 @@
-// localStorage-backed chat history persistence
-const STORAGE_KEY = 'saarthi_chats';
-const PROFILE_KEY = 'saarthi_profile';
+// Local-first persistence: chats, profile and tracker never leave the device
+// (except the profile fields sent along with a question to personalise answers).
+import { useSyncExternalStore } from 'react';
+
+const KEYS = { chats: 'saarthi_chats', profile: 'saarthi_profile', tracker: 'saarthi_tracker' };
+
+export const DEFAULT_PROFILE = { name: '', age: '', gender: '', state: '', occupation: '', income: '', category: '', disability: false, language: 'English' };
+
+const read = (key, fallback) => {
+  try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; }
+};
+
+const listeners = new Set();
+const cache = {};
+const write = (key, value) => {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* storage full or blocked: keep in memory */ }
+  cache[key] = value;
+  listeners.forEach((l) => l());
+};
+const get = (key, fallback) => {
+  if (!(key in cache)) cache[key] = read(key, fallback);
+  return cache[key];
+};
 
 export const storage = {
-  getChats: () => {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } 
-    catch { return []; }
-  },
+  getChats: () => get(KEYS.chats, []),
   saveChat: (chat) => {
-    const chats = storage.getChats();
-    const idx = chats.findIndex(c => c.sessionId === chat.sessionId);
-    if (idx >= 0) chats[idx] = chat;
-    else chats.unshift(chat);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(chats.slice(0, 50))); // keep last 50
+    const others = storage.getChats().filter((c) => c.id !== chat.id);
+    write(KEYS.chats, [chat, ...others].slice(0, 50));
   },
-  deleteChat: (sessionId) => {
-    const chats = storage.getChats().filter(c => c.sessionId !== sessionId);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(chats));
-  },
-  getProfile: () => {
-    try { return JSON.parse(localStorage.getItem(PROFILE_KEY) || 'null'); }
-    catch { return null; }
-  },
-  saveProfile: (profile) => {
-    localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
-  }
+  deleteChat: (id) => write(KEYS.chats, storage.getChats().filter((c) => c.id !== id)),
+
+  getProfile: () => ({ ...DEFAULT_PROFILE, ...get(KEYS.profile, {}) }),
+  saveProfile: (profile) => write(KEYS.profile, profile),
+
+  getTracker: () => get(KEYS.tracker, []),
+  saveTracker: (items) => write(KEYS.tracker, items),
+  addTrackerItem: (item) => storage.saveTracker([{ id: crypto.randomUUID(), done: false, createdAt: new Date().toISOString(), ...item }, ...storage.getTracker()]),
+
+  clearAll: () => { Object.values(KEYS).forEach((k) => { try { localStorage.removeItem(k); } catch { /* ignore */ } delete cache[k]; }); listeners.forEach((l) => l()); }
 };
+
+const subscribe = (l) => { listeners.add(l); return () => listeners.delete(l); };
+
+// React hooks that re-render whenever the stored value changes (any page).
+export const useProfile = () => useSyncExternalStore(subscribe, () => get(KEYS.profile, {}));
+export const useTracker = () => useSyncExternalStore(subscribe, storage.getTracker);
+export const useChats = () => useSyncExternalStore(subscribe, storage.getChats);
+
+export const LANGUAGES = {
+  English: 'en-IN', Hindi: 'hi-IN', Bengali: 'bn-IN', Marathi: 'mr-IN', Telugu: 'te-IN', Tamil: 'ta-IN', Gujarati: 'gu-IN',
+  Urdu: 'ur-IN', Kannada: 'kn-IN', Odia: 'or-IN', Malayalam: 'ml-IN', Punjabi: 'pa-IN', Assamese: 'as-IN'
+};
+export const speechLang = (language) => LANGUAGES[language] || 'en-IN';

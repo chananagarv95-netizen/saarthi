@@ -1,0 +1,24 @@
+.scheme-form { padding: var(--space-xl); border-radius: var(--radius-lg); background: var(--color-card); border: 1px solid var(--color-border); }
+.scheme-form .save-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.scheme-form .field-hint { margin-top: var(--space-sm); }
+
+.scheme-results { margin-top: var(--space-2xl); }
+.scheme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--space-md); }
+.scheme-card {
+  display: flex; flex-direction: column; padding: var(--space-lg); border-radius: var(--radius-md);
+  background: var(--color-card); border: 1px solid var(--color-border); border-top: 3px solid var(--color-success);
+  animation: slideUp 0.4s ease both; transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.scheme-card:nth-child(3n+2) { border-top-color: var(--color-accent); }
+.scheme-card:nth-child(3n) { border-top-color: var(--color-primary); }
+.scheme-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.scheme-card h3 { font-size: 17px; font-weight: 600; margin-bottom: 4px; }
+.scheme-benefit { font-size: 14px; font-weight: 500; color: var(--color-success); margin-bottom: var(--space-sm); }
+.scheme-reason { font-size: 13px; color: var(--color-text-muted); flex: 1; }
+.scheme-card .widget-actions { margin-top: var(--space-md); }
+
+.error-banner { margin-top: var(--space-lg); padding: var(--space-md); border-radius: var(--radius-sm); background: rgba(220, 38, 38, 0.08); color: var(--color-danger); font-size: 14px; }
+
+@media (max-width: 768px) {
+  .scheme-form { padding: var(--space-md); }
+}
